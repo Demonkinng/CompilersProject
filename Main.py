@@ -3,8 +3,7 @@
     Proyecto # 01 - Implementacion de Grafos en Python con POO
     Autor: Angel David Chuncho Jimenez
     Carrera: Ingenieria de Software
-    Fecha: 05/01/2024
-    Referencia: Data Structures & Algorithms in Python by Michael Goodrich, et al. (1st Edition)
+    Fecha: 05/03/2024
 """
 
 from Lexer import Lexer
@@ -33,20 +32,21 @@ def click_handler():
     parser = Parser(lexer)
     result, tokens, parse_tree = parser.parse()
     txtResult.configure(state="normal")
-    txtResult.delete(1.0, "end")
-    txtResult.insert("end", result)
+    txtResult.delete(1.0, "end")  # Limpiar widget
+    txtResult.insert("end", result)  # Mostrar resultado
     txtResult.configure(state="disabled")
     tokens_text = "\n".join([str(token) for token in tokens])
     txtTokens.configure(state="normal")
-    txtTokens.delete(1.0, "end")  # Limpiar el contenido actual del widget
-    txtTokens.insert("end", tokens_text)  # Insertar los tokens
+    txtTokens.delete(1.0, "end")  # Limpiar widget
+    txtTokens.insert("end", tokens_text)  # Mostrar los tokens
     txtTokens.configure(state="disabled")
     txtParseTree.configure(state="normal")
-    txtParseTree.delete(1.0, "end")
-    txtParseTree.insert("end", parse_tree)
+    txtParseTree.delete(1.0, "end")  # Limpiar widget
+    txtParseTree.insert("end", parse_tree)  # Mostrar el parser tree
     txtParseTree.configure(state="disabled")
 
 
+# Widgets
 lblTitle = CTkLabel(master=app, text="PARSER DE OPERACIONES\n ARITMÉTICAS SIMPLES", font=("Berlin Sans FB Demi", 18))
 txtInput = CTkEntry(master=app, placeholder_text="Ingresa una operación", width=180)
 btnParsing = CTkButton(master=app, text="Parsing", corner_radius=30, font=("Bauhaus 93", 16), width=100, command=click_handler)

@@ -1,25 +1,23 @@
-"""
-    Class: Token
-    Description: creating token objects to specify each token generated in lexical analysis
-    Author: Angel David Chuncho Jimenez
-"""
+# ENUM para identificadores de token
+TT_INT      = 'INT'       # Token Tipo: Entero                [0, 1, 2, ...]
+TT_SUM      = 'SUM'       # Token Tipo: Suma                  [+]
+TT_RES      = 'RES'       # Token Tipo: Resta                 [-]
+TT_MUL      = 'MUL'       # Token Tipo: Multiplicacion        [*]
+TT_DIV      = 'DIV'       # Token Tipo: Division              [/]
+TT_PARENIZQ = 'PARENIZQ'  # Token Tipo: Parentesis izquierdo  [(]
+TT_PARENDER = 'PARENDER'  # Token Tipo: Parentesis derecho    [)]
+TT_EOF      = 'EOF'       # Token Tipo: End Of File           [fin del archivo]
 
-# Token identifiers
-TT_INT    = 'INT'       # Type Token: Integer           [0, 1, 2, ...]
-TT_PLUS   = 'PLUS'      # Type Token: Plus              [+]
-TT_MINUS  = 'MINUS'     # Type Token: Minus             [-]
-TT_MUL    = 'MUL'       # Type Token: Multiplication    [*]
-TT_DIV    = 'DIV'       # Type Token: Division          [/]
-TT_LPAREN = 'LPAREN'    # Type Token: Left Parentheses  [(]
-TT_RPAREN = 'RPAREN'    # Type Token: Right             [)]
-TT_EOF    = 'EOF'       # Type Token: End Of File       [no more input]
-
+"""
+    Clase: Token
+    Descripcion: crear objetos tipo token para especificar cada token generado en el análisis léxico
+"""
 class Token:
-    def __init__(self, type, value):
-        # token type
-        self.type = type
-        # token value
-        self.value = value
+    def __init__(self, tipo, valor):
+        # tipo de token
+        self.tipo = tipo
+        # valor del token
+        self.valor = valor
 
     def __str__(self):
         """
@@ -29,8 +27,8 @@ class Token:
             Token(PLUS '+')
         """
         return 'Token({type}, {value})'.format(
-            type=self.type,
-            value=repr(self.value)
+            type=self.tipo,
+            value=repr(self.valor)
         )
 
     def __repr__(self):

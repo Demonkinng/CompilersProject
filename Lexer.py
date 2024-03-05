@@ -1,87 +1,101 @@
-"""
-    Class: Lexer
-    Description: class that allows lexical analysis to be performed
-    Author: Angel David Chuncho Jimenez
-"""
+from tkinter import messagebox
+
 from Token import *
+
+"""
+    Clase: Lexer
+    Descripcion: clase que permite realizar el analisis lexico
+"""
 class Lexer:
-    def __init__(self, text):
-        # input string
-        self.text = text
-        # current position in the input string
+    def __init__(self, texto):
+        # entrada de texto, por ejemplo: "5 + 5"
+        self.texto = texto
+        # posicion del caracter en el texto
         self.pos = 0
-        # current character being pointed to
-        self.current_char = self.text[self.pos] if self.pos < len(self.text) else None
+        # caracter actual en el texto
+        self.caracter_actual = self.texto[self.pos] if self.pos < len(self.texto) else None
 
     def error(self):
-        raise Exception('Sintaxis Inválida')
-
-    def advance(self):
         """
-        Advance the 'pos' pointer and set the 'current_char' variable.
+            Método para generar una excepción si la sintaxis es invalida
+        """
+        # raise messagebox.showerror("Error", f"Error de análisis léxico. Caracter no reconocido: '{self.caracter_actual}'")
+        raise Exception(messagebox.showerror("Error", f"Error de análisis léxico. Caracter no reconocido: '{self.caracter_actual}'"))
+
+    def consumir(self):
+        """
+            Avanza el puntero 'pos' y establece la variable 'caracter_actual'
         """
         self.pos += 1
-        if self.pos < len(self.text):
-            self.current_char = self.text[self.pos]
+        if self.pos < len(self.texto):
+            self.caracter_actual = self.texto[self.pos]
         else:
-            self.current_char = None
+            self.caracter_actual = None
 
-    def skip_whitespace(self):
+    def ignorar_espacios(self):
         """
-        Skip whitespace characters in the input string.
+            Omite los espacios en blanco en el texto de entrada
         """
-        while self.current_char is not None and self.current_char.isspace():
-            self.advance()
+        while self.caracter_actual is not None and self.caracter_actual.isspace():
+            self.consumir()
 
     def integer(self):
         """
-        Return a (multidigit) integer consumed from the input.
+            Devuelve un numero entero consumido desde la entrada
         """
-        result = ''
-        while self.current_char is not None and self.current_char.isdigit():
-            result += self.current_char
-            self.advance()
-        return int(result)
+        resultado = ''
+        while self.caracter_actual is not None and self.caracter_actual.isdigit():
+            resultado += self.caracter_actual
+            self.consumir()
+        return int(resultado)
 
-    def tokenizer(self):
+    def tokenizador(self):
         """
-        Lexical analyzer
-
-        This method is responsible for breaking a sentence
-        apart into tokens. One token at a time.
+            analizador léxico (también conocido como "scanner" o "lexer")
+            se encarga de segmentar el texto en tokens (uno a la vez)
         """
-        while self.current_char is not None:
-            if self.current_char.isspace():
-                self.skip_whitespace()
+        while self.caracter_actual is not None:
+            # ignora los espacios en blanco
+            if self.caracter_actual.isspace():
+                self.ignorar_espacios()
                 continue
 
-            if self.current_char.isdigit():
+            # si el caracter actual es un digito,
+            # entonces retorna un token de tipo entero
+            if self.caracter_actual.isdigit():
                 return Token(TT_INT, self.integer())
 
-            if self.current_char == '+':
-                self.advance()
-                return Token(TT_PLUS, '+')
+            # si el caracter actual es un signo de suma, resta,
+            # multiplicacion, division, parentesis izquierdo o derecho
+            # entonces retorna un token acorde al tipo
+            if self.caracter_actual == '+':
+                self.consumir()
+                return Token(TT_SUM, '+')
 
-            if self.current_char == '-':
-                self.advance()
-                return Token(TT_MINUS, '-')
+            if self.caracter_actual == '-':
+                self.consumir()
+                return Token(TT_RES, '-')
 
-            if self.current_char == '*':
-                self.advance()
+            if self.caracter_actual == '*':
+                self.consumir()
                 return Token(TT_MUL, '*')
 
-            if self.current_char == '/':
-                self.advance()
+            if self.caracter_actual == '/':
+                self.consumir()
                 return Token(TT_DIV, '/')
 
-            if self.current_char == '(':
-                self.advance()
-                return Token(TT_LPAREN, '(')
+            if self.caracter_actual == '(':
+                self.consumir()
+                return Token(TT_PARENIZQ, '(')
 
-            if self.current_char == ')':
-                self.advance()
-                return Token(TT_RPAREN, ')')
+            if self.caracter_actual == ')':
+                self.consumir()
+                return Token(TT_PARENDER, ')')
 
+            # si el caracter actual no es reconocido,
+            # entonces genera una excepción
             self.error()
 
+        # Si es caracter actual es None
+        # retorna un token de fin del texto
         return Token(TT_EOF, None)
