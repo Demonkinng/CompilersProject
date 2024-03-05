@@ -1,10 +1,9 @@
 from tkinter import messagebox
-
 from Token import *
 
 """
     Clase: Lexer
-    Descripcion: clase que permite realizar el analisis lexico
+    Descripción: clase que permite realizar el analisis lexico
 """
 class Lexer:
     def __init__(self, texto):
@@ -19,7 +18,6 @@ class Lexer:
         """
             Método para generar una excepción si la sintaxis es invalida
         """
-        # raise messagebox.showerror("Error", f"Error de análisis léxico. Caracter no reconocido: '{self.caracter_actual}'")
         raise Exception(messagebox.showerror("Error", f"Error de análisis léxico. Caracter no reconocido: '{self.caracter_actual}'"))
 
     def consumir(self):

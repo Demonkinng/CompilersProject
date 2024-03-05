@@ -1,7 +1,9 @@
+from Token import *
+from Parse_Tree import Nodo
+
 """
-    Class: Parser
-    Description: clase que permite realizar el análisis léxico
-    Autor: Angel David Chuncho Jimenez
+    Clase: Parser
+    Descripción: clase que permite realizar el análisis sintáctico
 """
 from Token import *
 from Parse_Tree import Node
@@ -9,52 +11,55 @@ from Parse_Tree import Node
 class Parser:
     def __init__(self, lexer):
         self.lexer = lexer
-        self.current_token = self.lexer.tokenizador()
+        self.token_actual = self.lexer.tokenizador()
         self.tokens_list = []
 
     def error(self):
+        """
+            Método para generar una excepción si el análisis sintáctico es inválido
+        """
         raise Exception('Error de análisis sintáctico')
 
-    def eat(self, token_type):
+    def consumir(self, token_type):
         """
-        Compara el tipo de token actual con el tipo de token pasado
-        y si coinciden, entonces "consume" el token actual y asigna
-        el siguiente token al self.current_token; de lo contrario, genera una excepción.
+            Compara el tipo de token actual con el tipo de token pasado
+            y si coinciden, entonces "consume" el token actual y asigna
+            el siguiente token al self.current_token; de lo contrario, genera una excepción.
         """
-        if self.current_token.tipo == token_type:
-            self.tokens_list.append(self.current_token)
-            self.current_token = self.lexer.tokenizador()
+        if self.token_actual.tipo == token_type:
+            self.tokens_list.append(self.token_actual)
+            self.token_actual = self.lexer.tokenizador()
         else:
             self.error()
 
     def factor(self):
         """
-        factor : INTEGER | LPAREN expr RPAREN
+            factor : INTEGER | LPAREN expr RPAREN
         """
-        token = self.current_token
+        token = self.token_actual
         if token.tipo == TT_INT:
-            self.eat(TT_INT)
-            return Node('INTEGER', [token.valor])
+            self.consumir(TT_INT)
+            return Nodo('INTEGER', [token.valor])
         elif token.tipo == TT_PARENIZQ:
-            self.eat(TT_PARENIZQ)
+            self.consumir(TT_PARENIZQ)
             node = self.expr()
-            self.eat(TT_PARENDER)
+            self.consumir(TT_PARENDER)
             return node
 
     def term(self):
         """
-        term : factor ((MUL | DIV) factor)*
+            term : factor ((MUL | DIV) factor)*
         """
         node = self.factor()
 
-        while self.current_token.tipo in (TT_MUL, TT_DIV):
-            token = self.current_token
+        while self.token_actual.tipo in (TT_MUL, TT_DIV):
+            token = self.token_actual
             if token.tipo == TT_MUL:
-                self.eat(TT_MUL)
+                self.consumir(TT_MUL)
             elif token.tipo == TT_DIV:
-                self.eat(TT_DIV)
+                self.consumir(TT_DIV)
 
-            node = Node(token.tipo, [node, self.factor()])
+            node = Nodo(token.tipo, [node, self.factor()])
 
         return node
 
@@ -64,20 +69,20 @@ class Parser:
         """
         node = self.term()
 
-        while self.current_token.tipo in (TT_SUM, TT_RES):
-            token = self.current_token
+        while self.token_actual.tipo in (TT_SUM, TT_RES):
+            token = self.token_actual
             if token.tipo == TT_SUM:
-                self.eat(TT_SUM)
+                self.consumir(TT_SUM)
             elif token.tipo == TT_RES:
-                self.eat(TT_RES)
+                self.consumir(TT_RES)
 
-            node = Node(token.tipo, [node, self.term()])
+            node = Nodo(token.tipo, [node, self.term()])
 
         return node
 
     def parse(self):
         """
-        Analiza la expresión.
+            Analiza la expresión.
         """
         parse_tree = self.expr()
         return self.evaluate(parse_tree), self.tokens_list, parse_tree
@@ -86,13 +91,13 @@ class Parser:
         """
         Evalúe el árbol de expresión de forma recursiva.
         """
-        if node.type == 'INTEGER':
-            return node.children[0]
-        elif node.type == 'SUM':
-            return self.evaluate(node.children[0]) + self.evaluate(node.children[1])
-        elif node.type == 'RES':
-            return self.evaluate(node.children[0]) - self.evaluate(node.children[1])
-        elif node.type == 'MUL':
-            return self.evaluate(node.children[0]) * self.evaluate(node.children[1])
-        elif node.type == 'DIV':
-            return self.evaluate(node.children[0]) / self.evaluate(node.children[1])
+        if node.tipo == 'INTEGER':
+            return node.hijo[0]
+        elif node.tipo == 'SUM':
+            return self.evaluate(node.hijo[0]) + self.evaluate(node.hijo[1])
+        elif node.tipo == 'RES':
+            return self.evaluate(node.hijo[0]) - self.evaluate(node.hijo[1])
+        elif node.tipo == 'MUL':
+            return self.evaluate(node.hijo[0]) * self.evaluate(node.hijo[1])
+        elif node.tipo == 'DIV':
+            return self.evaluate(node.hijo[0]) / self.evaluate(node.hijo[1])

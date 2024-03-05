@@ -1,13 +1,17 @@
-class Node:
-    def __init__(self, type, children=None):
-        self.type = type
-        self.children = children if children else []
+"""
+    Clase: Nodo
+    Descripción: clase que permite la creación de un árbol de análisis sintáctico
+"""
+class Nodo:
+    def __init__(self, tipo, hijo=None):
+        self.tipo = tipo
+        self.hijo = hijo if hijo else []
 
-    def __repr__(self, level=0):
-        ret = "\t" * level + repr(self.type) + "\n"
-        for child in self.children:
-            if isinstance(child, Node):
-                ret += child.__repr__(level + 1)
+    def __repr__(self, nivel=0):
+        ret = "\t" * nivel + repr(self.tipo) + "\n"
+        for hijo in self.hijo:
+            if isinstance(hijo, Nodo):
+                ret += hijo.__repr__(nivel + 1)
             else:
-                ret += "\t" * (level + 1) + repr(child) + "\n"
+                ret += "\t" * (nivel + 1) + repr(hijo) + "\n"
         return ret

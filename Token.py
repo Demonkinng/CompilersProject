@@ -1,16 +1,6 @@
-# ENUM para identificadores de token
-TT_INT      = 'INT'       # Token Tipo: Entero                [0, 1, 2, ...]
-TT_SUM      = 'SUM'       # Token Tipo: Suma                  [+]
-TT_RES      = 'RES'       # Token Tipo: Resta                 [-]
-TT_MUL      = 'MUL'       # Token Tipo: Multiplicacion        [*]
-TT_DIV      = 'DIV'       # Token Tipo: Division              [/]
-TT_PARENIZQ = 'PARENIZQ'  # Token Tipo: Parentesis izquierdo  [(]
-TT_PARENDER = 'PARENDER'  # Token Tipo: Parentesis derecho    [)]
-TT_EOF      = 'EOF'       # Token Tipo: End Of File           [fin del archivo]
-
 """
     Clase: Token
-    Descripcion: crear objetos tipo token para especificar cada token generado en el análisis léxico
+    Descripción: crear objetos tipo token para especificar cada token generado en el análisis léxico
 """
 class Token:
     def __init__(self, tipo, valor):
@@ -31,8 +21,13 @@ class Token:
             value=repr(self.valor)
         )
 
-    def __repr__(self):
-        """
-            Method for representing the objects in a class as a string
-        """
-        return self.__str__()
+
+# ENUM para identificadores de token
+TT_INT      = 'INT'       # Token Tipo: Entero                [0, 1, 2, ...]
+TT_SUM      = 'SUM'       # Token Tipo: Suma                  [+]
+TT_RES      = 'RES'       # Token Tipo: Resta                 [-]
+TT_MUL      = 'MUL'       # Token Tipo: Multiplicacion        [*]
+TT_DIV      = 'DIV'       # Token Tipo: Division              [/]
+TT_PARENIZQ = 'PARENIZQ'  # Token Tipo: Parentesis izquierdo  [(]
+TT_PARENDER = 'PARENDER'  # Token Tipo: Parentesis derecho    [)]
+TT_EOF      = 'EOF'       # Token Tipo: End Of File           [fin del archivo]
